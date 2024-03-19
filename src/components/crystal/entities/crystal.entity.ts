@@ -1,14 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as DocumentSchema } from 'mongoose';
 
-export type StoneDocument = StoneEntity & Document;
+export type CrystalDocument = CrystalEntity & Document;
 
 @Schema({
-    collection: 'Stones',
+    collection: 'Crystal',
     versionKey: false
 })
 
-export class StoneEntity {
+export class CrystalEntity {
+
+    @Prop({
+        required: true,
+    })
+    price: string;
+
     @Prop({
         required: true,
     })
@@ -29,4 +35,4 @@ export class StoneEntity {
     })
     source: string;
 }
-export const StoneSchema = SchemaFactory.createForClass(StoneEntity);
+export const CrystalSchema = SchemaFactory.createForClass(CrystalEntity);

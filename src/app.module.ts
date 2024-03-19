@@ -1,11 +1,13 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
+// Auth
+import { AuthModule } from './components/auth/auth.module';
 // MongoDB
 import { MongooseModule } from '@nestjs/mongoose';
 // Config
 import { ConfigModule } from '@nestjs/config';
-import { StonesModule } from './components/stones/stones.module';
+import { CrystalModule } from './components/crystal/crystal.module';
+// Middleware
+import { GetUserMiddleware } from './components/middleware/user.middleware';
 
 @Module({
      imports: [
@@ -13,12 +15,23 @@ import { StonesModule } from './components/stones/stones.module';
                isGlobal: true,
                envFilePath: ['.env.development']
           }),
+          AuthModule,
           MongooseModule.forRoot(process.env.MONGODB_URI, {
                dbName: process.env.DB_NAME
           }),
-          StonesModule
+          CrystalModule
      ],
-     controllers: [AppController],
-     providers: [AppService],
+     controllers: [],
+     providers: [],
 })
-export class AppModule { }
+export class AppModule {
+     configure(consumer: MiddlewareConsumer) {
+          consumer
+               .apply(GetUserMiddleware)
+               .exclude(
+                    { path: 'auth/signup', method: RequestMethod.POST },
+                    { path: 'auth/signin', method: RequestMethod.POST },
+               )
+               .forRoutes('*');
+     }
+}
