@@ -29,7 +29,7 @@ export class UsersService {
       throw new Error('Failed to create user');
     }
   }
-  
+
 
   async findAll(): Promise<UserDocument[]> {
     return await this.userModel.find().exec();
@@ -96,106 +96,106 @@ export class UsersService {
       if (!senderUser) {
         throw new NotFoundException('Sender not found');
       }
-  
+
       const receiverUser = await this.findById(receiverId);
       if (!receiverUser) {
         throw new NotFoundException('Receiver not found');
       }
-  
-      const isAlreadyFriend = receiverUser.friends.includes(senderUser._id);
+      const senderUserIdString = (senderUser._id).toString();
+      const isAlreadyFriend = receiverUser.friends.some(request => request.toString() === senderUserIdString);
       if (isAlreadyFriend) {
         throw new Error('Already friends');
       }
-  
+
       await this.userModel.updateOne({ _id: receiverUser._id }, { $push: { "pending.pendingReceivedRequests": senderUser._id } });
-  
+
       await this.userModel.updateOne({ _id: senderUser._id }, { $push: { "pending.pendingSentRequests": receiverUser._id } });
-  
-      return { sender: senderUser, receiver: receiverUser };
+
+      return { message: 'successfully' };
     } catch (error) {
       throw error;
     }
   }
-  
+
   async acceptFriend(userId: string, friendId: string) {
     try {
       const user = await this.findById(userId);
       if (!user) {
         throw new NotFoundException('User not found');
       }
-  
+
       const friendUser = await this.findById(friendId);
       if (!friendUser) {
         throw new NotFoundException('Friend not found');
       }
-  
-      const isPendingFriend = user.pending.pendingReceivedRequests.includes(friendUser._id);
+      const friendUserIdString = (friendUser._id).toString();
+      const isPendingFriend = user.pending.pendingReceivedRequests.some(request => request.toString() === friendUserIdString);
       if (!isPendingFriend) {
         throw new Error('Friend request not found');
       }
-  
+
       await this.userModel.updateOne({ _id: user._id }, { $pull: { "pending.pendingReceivedRequests": friendUser._id } });
       await this.userModel.updateOne({ _id: user._id }, { $push: { friends: friendUser._id } });
       await this.userModel.updateOne({ _id: friendUser._id }, { $pull: { "pending.pendingSentRequests": user._id } });
       await this.userModel.updateOne({ _id: friendUser._id }, { $push: { friends: user._id } });
-  
-      return { user, friend: friendUser };
+
+      return { message: 'successfully' };
     } catch (error) {
       throw error;
     }
   }
-  
+
   async rejectFriend(userId: string, friendId: string) {
     try {
       const user = await this.findById(userId);
       if (!user) {
         throw new NotFoundException('User not found');
       }
-  
+
       const friendUser = await this.findById(friendId);
       if (!friendUser) {
         throw new NotFoundException('Friend not found');
       }
-  
-      const isPendingFriend = user.pending.pendingReceivedRequests.includes(friendUser._id);
+      const friendUserIdString = (friendUser._id).toString();
+      const isPendingFriend = user.pending.pendingReceivedRequests.some(request => request.toString() === friendUserIdString);
       if (!isPendingFriend) {
         throw new Error('Friend request not found');
       }
-  
+
       await this.userModel.updateOne({ _id: user._id }, { $pull: { "pending.pendingReceivedRequests": friendUser._id } });
       await this.userModel.updateOne({ _id: friendUser._id }, { $pull: { "pending.pendingSentRequests": user._id } });
 
-      return { user, friend: friendUser };
+      return { message: 'successfully' };
     } catch (error) {
       throw error;
     }
   }
-  
+
   async cancelFriendRequest(userId: string, friendId: string) {
     try {
       const user = await this.findById(userId);
       if (!user) {
         throw new NotFoundException('User not found');
       }
-  
+
       const friendUser = await this.findById(friendId);
       if (!friendUser) {
         throw new NotFoundException('Friend not found');
       }
-  
-      const isPendingSent = user.pending.pendingSentRequests.includes(friendUser._id);
+      const friendUserIdString = (friendUser._id).toString();
+      const isPendingSent = user.pending.pendingSentRequests.some(request => request.toString() === friendUserIdString);
       if (!isPendingSent) {
         throw new Error('Friend request not found');
       }
-  
+
       await this.userModel.updateOne({ _id: user._id }, { $pull: { "pending.pendingSentRequests": friendUser._id } });
       await this.userModel.updateOne({ _id: friendUser._id }, { $pull: { "pending.pendingReceivedRequests": user._id } });
-  
-      return { user, friend: friendUser };
+
+      return { message: 'successfully' };
     } catch (error) {
       throw error;
     }
   }
-  
+
 
 }

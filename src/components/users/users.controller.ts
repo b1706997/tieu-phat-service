@@ -39,7 +39,7 @@ export class UsersController {
   @Post('add-friend/:friendId')
   @UseInterceptors(WrapResponseInterceptor)
   async addFriend(@AuthUser() user: any, @Param('friendId') friendId: string) {
-    return this.usersService.addFriend(user.email, friendId);
+    return this.usersService.addFriend(user._id, friendId);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -47,7 +47,7 @@ export class UsersController {
   @Post('accept-friend/:friendId')
   @UseInterceptors(WrapResponseInterceptor)
   async acceptFriend(@AuthUser() user: any, @Param('friendId') friendId: string) {
-    return this.usersService.acceptFriend(user.email, friendId);
+    return this.usersService.acceptFriend(user._id, friendId);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -55,7 +55,7 @@ export class UsersController {
   @Post('reject-friend/:friendId')
   @UseInterceptors(WrapResponseInterceptor)
   async rejectFriend(@AuthUser() user: any, @Param('friendId') friendId: string) {
-    return this.usersService.rejectFriend(user.email, friendId);
+    return this.usersService.rejectFriend(user._id, friendId);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -63,6 +63,6 @@ export class UsersController {
   @Post('cancel-friend-request/:friendId')
   @UseInterceptors(WrapResponseInterceptor)
   async cancelFriendRequest(@AuthUser() user: any, @Param('friendId') friendId: string) {
-    return this.usersService.cancelFriendRequest(user.email, friendId);
+    return this.usersService.cancelFriendRequest(user._id, friendId);
   }
 }
