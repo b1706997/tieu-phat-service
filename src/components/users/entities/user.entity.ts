@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Schema as MongooseSchema, ObjectId } from 'mongoose';
 
 export type UserDocument = UserEntity & Document;
 
@@ -23,10 +24,16 @@ export class UserEntity {
     password: string;
 
     @Prop()
-    friends: UserEntity[];
+    friends: ObjectId[];
     
-    @Prop()
-    pendingRequests: UserEntity[];
+    @Prop({
+        type: Object,
+        default: { pendingSentRequests: [], pendingReceivedRequests: [] }
+    })
+    pending: {
+        pendingSentRequests: ObjectId[];
+        pendingReceivedRequests: ObjectId[];
+    };
 
     @Prop()
     refreshToken: string;

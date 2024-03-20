@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, UseInterceptors, Query, NotFoundException } from '@nestjs/common';
+import { Controller, Get, UseGuards, UseInterceptors, Query, NotFoundException, Post, Param } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { AccessTokenGuard } from '../auth/guards/accessToken.guard';
@@ -33,5 +33,36 @@ export class UsersController {
     }
     return users;
   }
+  
+  @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
+  @Post('add-friend/:friendId')
+  @UseInterceptors(WrapResponseInterceptor)
+  async addFriend(@AuthUser() user: any, @Param('friendId') friendId: string) {
+    return this.usersService.addFriend(user.email, friendId);
+  }
 
+  @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
+  @Post('accept-friend/:friendId')
+  @UseInterceptors(WrapResponseInterceptor)
+  async acceptFriend(@AuthUser() user: any, @Param('friendId') friendId: string) {
+    return this.usersService.acceptFriend(user.email, friendId);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
+  @Post('reject-friend/:friendId')
+  @UseInterceptors(WrapResponseInterceptor)
+  async rejectFriend(@AuthUser() user: any, @Param('friendId') friendId: string) {
+    return this.usersService.rejectFriend(user.email, friendId);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
+  @Post('cancel-friend-request/:friendId')
+  @UseInterceptors(WrapResponseInterceptor)
+  async cancelFriendRequest(@AuthUser() user: any, @Param('friendId') friendId: string) {
+    return this.usersService.cancelFriendRequest(user.email, friendId);
+  }
 }

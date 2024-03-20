@@ -20,7 +20,7 @@ export class GetUserMiddleware implements NestMiddleware {
             }
         } catch (err) {
             console.log("Error handling authentication JWT: ", err);
-            return res.status(401).json({ message: "Invalid token" }); // Send 401 Unauthorized response
+            return res.status(401).json({ message: "Invalid token" });
         }
         next();
     }

@@ -16,7 +16,7 @@ export default class WrapResponseInterceptor implements NestInterceptor {
         if (args[0] && typeof args[0] === 'object') {
           const keys = Object.keys(args[0]);
           if (
-            keys.includes('value') ||
+            keys.includes('data') ||
             keys.includes('message') ||
             keys.includes('statusCode')
           )

@@ -14,7 +14,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async signUp(createUserDto: CreateUserDto): Promise<any> {
+  async signUp(createUserDto: CreateUserDto) {
     try {
         const { email, password } = createUserDto;
         const userExists = await this.usersService.findByEmail(email);
@@ -24,7 +24,7 @@ export class AuthService {
         
         const hash = await bcrypt.hash(password, 10);
         const newUser = await this.usersService.create({ ...createUserDto, password: hash });
-        const tokens = await this.getTokens(newUser.role, newUser.email);
+        const tokens = await this.getTokens(newUser._id, newUser.email, newUser.role);
         await this.updateRefreshToken(newUser.email, tokens.refreshToken);
         return tokens;
     } catch (error) {
@@ -45,7 +45,7 @@ async signIn(data: AuthDto) {
           throw new BadRequestException('Password or Email is incorrect');
       }
       
-      const tokens = await this.getTokens(user.role, user.email);
+      const tokens = await this.getTokens(user._id, user.email, user.role);
       await this.updateRefreshToken(user.email, tokens.refreshToken);
       return tokens;
   } catch (error) {
@@ -71,14 +71,14 @@ async signIn(data: AuthDto) {
     }
   }
 
-  async getTokens(userId: string, email: string) {
+  async getTokens(userId: string, email: string, role: string) {
     try {
       const [accessToken, refreshToken] = await Promise.all([
-        this.jwtService.signAsync({ sub: userId, email }, {
+        this.jwtService.signAsync({ _id: userId, email, role }, {
           secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
           expiresIn: '15m',
         }),
-        this.jwtService.signAsync({ sub: userId, email }, {
+        this.jwtService.signAsync({ _id: userId, email, role }, {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
           expiresIn: '7d',
         }),

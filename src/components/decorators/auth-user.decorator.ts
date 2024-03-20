@@ -4,7 +4,7 @@ const AuthUser = createParamDecorator(
   (
     data: unknown,
     ctx: ExecutionContext,
-  ): { email: string; role: string } => {
+  ): { _id: string, email: string; role: string } => {
     return ctx.switchToHttp().getRequest().user;
   },
 );
