@@ -136,6 +136,7 @@ export class UsersService {
   
       await this.userModel.updateOne({ _id: user._id }, { $pull: { "pending.pendingReceivedRequests": friendUser._id } });
       await this.userModel.updateOne({ _id: user._id }, { $push: { friends: friendUser._id } });
+      await this.userModel.updateOne({ _id: friendUser._id }, { $pull: { "pending.pendingSentRequests": user._id } });
       await this.userModel.updateOne({ _id: friendUser._id }, { $push: { friends: user._id } });
   
       return { user, friend: friendUser };
@@ -162,7 +163,8 @@ export class UsersService {
       }
   
       await this.userModel.updateOne({ _id: user._id }, { $pull: { "pending.pendingReceivedRequests": friendUser._id } });
-  
+      await this.userModel.updateOne({ _id: friendUser._id }, { $pull: { "pending.pendingSentRequests": user._id } });
+
       return { user, friend: friendUser };
     } catch (error) {
       throw error;
@@ -187,6 +189,7 @@ export class UsersService {
       }
   
       await this.userModel.updateOne({ _id: user._id }, { $pull: { "pending.pendingSentRequests": friendUser._id } });
+      await this.userModel.updateOne({ _id: friendUser._id }, { $pull: { "pending.pendingReceivedRequests": user._id } });
   
       return { user, friend: friendUser };
     } catch (error) {
