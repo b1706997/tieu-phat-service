@@ -9,18 +9,20 @@ import { Model } from 'mongoose';
 // entities
 import { CrystalEntity, CrystalDocument } from './entities/crystal.entity';
 // util services
-//import UtilService from '../util/util.service';
+import UtilService from '../util/util.service';
 
 @Injectable()
 export class CrystalService {
     constructor(
         @InjectModel(CrystalEntity.name)
         private crystalModel: Model<CrystalDocument>,
-        //private utilService: UtilService
+        private utilService: UtilService
     ) { }
     async create(dto: CreateCrystalDto) {
         try 
         {
+            const imageUrl = await this.utilService.uploadStonesImage(dto.image);
+            dto.image = imageUrl;
             const crystal = await this.crystalModel.create(dto);
             return { message: 'Crystal create successfully' };
         } 

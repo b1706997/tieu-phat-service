@@ -26,13 +26,18 @@ export default class UtilService {
             ACL: 'public-read'
         };
         const imageUrl = process.env.S3_LINKFILE + params.Key;
-        const upload = s3Services.upload(params).promise();
-        upload.then((data) => {
-            console.log(data);
-        }).catch((err) => {
-            console.log(err);
-        });
-
-        return imageUrl;
+        try {
+            const upload = s3Services.upload(params).promise();
+            upload.then((data) => {
+                console.log(data);
+            }).catch((err) => {
+                console.log(err);
+            });
+    
+            return imageUrl;
+        } catch(error) {
+            console.log(error);
+        }
+       
     }
 }
