@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors } from '@nestjs/common';
 import { CrystalService } from './crystal.service';
 import { CreateCrystalDto } from './dto/create-crystal.dto';
 import { UpdateCrystalDto } from './dto/update-crystal.dto';
@@ -6,6 +6,9 @@ import { PaginationMetaDto } from './dto/pagination-crystal.dto';
 import { CrystalDocument } from './entities/crystal.entity';
 // Swagger
 import { ApiTags } from '@nestjs/swagger';
+// Interceptor
+import WrapResponseInterceptor from '../interceptors/wrap-response.interceptor';
+
 
 @Controller('crystal')
 @ApiTags('crystal')
@@ -23,6 +26,7 @@ export class CrystalController {
   }
 
   @Get('pagination')
+  @UseInterceptors(WrapResponseInterceptor)
   async pagination
   (
     @Query('page') page?: number,

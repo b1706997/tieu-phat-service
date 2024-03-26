@@ -21,7 +21,7 @@ export default class UtilService {
         const s3Services = this.getS3Services();
         const params = {
             Bucket: `${process.env.AWS_BUCKET_NAME!}`,
-            Key: "FolderName/" + name,
+            Key: "Products/" + name,
             Body: buffer,
             ACL: 'public-read'
         };

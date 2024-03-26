@@ -13,6 +13,11 @@ export class CrystalEntity {
     @Prop({
         required: true,
     })
+    name: string;
+
+    @Prop({
+        required: true,
+    })
     price: string;
 
     @Prop({
@@ -26,13 +31,9 @@ export class CrystalEntity {
     image: string;
 
     @Prop({
-        required: true,
+        default: null
     })
     clip: string;
-
-    @Prop({
-        required: true,
-    })
-    source: string;
+    
 }
 export const CrystalSchema = SchemaFactory.createForClass(CrystalEntity);

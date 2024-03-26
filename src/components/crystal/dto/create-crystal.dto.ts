@@ -6,6 +6,11 @@ export class CreateCrystalDto {
     @ApiProperty({ type: String })
     @IsString()
     @IsNotEmpty()
+    name: string;
+
+    @ApiProperty({ type: String })
+    @IsString()
+    @IsNotEmpty()
     price: string;
 
     @ApiProperty({ type: String })
@@ -20,11 +25,6 @@ export class CreateCrystalDto {
 
     @ApiProperty({ type: String })
     @IsString()
-    @IsNotEmpty()
     clip: string;
 
-    @ApiProperty({ type: String })
-    @IsString()
-    @IsNotEmpty()
-    source: string;
 }
