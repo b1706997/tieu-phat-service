@@ -31,7 +31,7 @@ export class CrystalEntity {
     image: string;
 
     @Prop({
-        default: null
+        required: true,
     })
     clip: string;
     

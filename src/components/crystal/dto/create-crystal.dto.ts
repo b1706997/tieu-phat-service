@@ -25,6 +25,7 @@ export class CreateCrystalDto {
 
     @ApiProperty({ type: String })
     @IsString()
+    @IsNotEmpty()
     clip: string;
 
 }
