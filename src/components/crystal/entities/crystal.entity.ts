@@ -18,7 +18,7 @@ export class CrystalEntity {
     @Prop({
         required: true,
     })
-    price: string;
+    price: number;
 
     @Prop({
         required: true,
@@ -31,9 +31,14 @@ export class CrystalEntity {
     image: string;
 
     @Prop({
-        required: true,
+        default: null
     })
     clip: string;
+
+    @Prop({
+        default: 0
+    })
+    salesPercent: number;
     
 }
 export const CrystalSchema = SchemaFactory.createForClass(CrystalEntity);

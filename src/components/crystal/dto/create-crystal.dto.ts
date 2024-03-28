@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateCrystalDto {
 
@@ -8,10 +8,10 @@ export class CreateCrystalDto {
     @IsNotEmpty()
     name: string;
 
-    @ApiProperty({ type: String })
-    @IsString()
+    @ApiProperty({ type: Number })
+    @IsNumber()
     @IsNotEmpty()
-    price: string;
+    price: number;
 
     @ApiProperty({ type: String })
     @IsString()
@@ -24,8 +24,13 @@ export class CreateCrystalDto {
     image: string;
 
     @ApiProperty({ type: String })
+    @IsOptional()
     @IsString()
-    @IsNotEmpty()
-    clip: string;
+    clip?: string;
+
+    @ApiProperty({ type: Number })
+    @IsOptional()
+    @IsNumber()
+    salesPercent?: number;
 
 }
